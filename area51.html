@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>&lt;styled-textarea> Web Component</title>
+    <script>
+        !function (t, e, i, s, a = "this code is protected by international Copyright. Anlayzing this sourcecode in any way is a breach of copyright", n = ((i, s = {}, a = t.createElement(i)) => (s.append && a.append(...s.append), delete s.append, a = e.assign(a, s), a)), r = ((...t) => { }), o = "styled-font-family", l = ["0 #87ceeb,1 #ff69b4,2 #d3d3d3,3 #0000ff,4 #ff7f50,5 #32cd32,7 #ee82ee,8 #ff8c00", "0 #008,1 #f00,2 #07a,3 #dad,4 #080,5 #93c,7 #000,8 #d69", "0 #8bf,1 #ff0,2 #f43,3 #00f,4 #3d0,5 #fd0,7 #90f,8 #f33", "0 #009ACD,1 #FF6F91,2 #CCCCCC,3 #4169E1,4 #E97451,5 #93C572,7 #E6E6FA,8 #E4717A"]) { customElements.define("styled-textarea", class extends HTMLElement { static get observedAttributes() { return ["rows", "maxrows", "minrows", "marklines", "markcolor"] } constructor() { super().attachShadow({ mode: "open" }).append(n("style", { textContent: ":host{display:inline-block;width:100%;max-width:100%}:host([hidden]){display:none}textarea{font-size:var(--st-font-size,18px);font-weight:normal;line-height:1.3;opacity:1;width:100%;max-height:90vh;box-sizing:border-box;overflow-y:auto;white-space:pre;field-sizing:content;border:1px solid lightgrey;border-radius:.25rem;resize:vertical;}" }), this.palettestyle = n("style"), this.stylelinenumbers = n("style"), this.textarea = n("textarea", { id: "textarea_" + crypto.randomUUID().replaceAll("-", ""), part: "textarea", wrap: this.getAttribute("wrap") || "off", onkeyup: t => this.dispatch(t), oninput: t => this.dispatch(t), onfocus: t => this.dispatch(t), onblur: t => this.dispatch(t), oncopy: t => this.dispatch(t), onpaste: t => this.dispatch(t), oncut: t => this.dispatch(t), onkeydown: t => this.dispatch(t), onkeypress: t => this.dispatch(t), onmousedown: t => this.dispatch(t), onmouseup: t => this.dispatch(t), onmouseover: t => this.dispatch(t), onmouseout: t => this.dispatch(t), onmousemove: t => this.dispatch(t), oncontextmenu: t => this.dispatch(t), ondrag: t => this.dispatch(t), ondragend: t => this.dispatch(t), ondragenter: t => this.dispatch(t), ondragleave: t => this.dispatch(t), ondragover: t => this.dispatch(t), ondragstart: t => this.dispatch(t), ondrop: t => this.dispatch(t), onscroll: t => this.dispatch(t), onselect: t => this.dispatch(t), onsubmit: t => this.dispatch(t), onreset: t => this.dispatch(t), onresize: t => this.dispatch(t), onscrollend: t => this.dispatch(t), onscrollstart: t => this.dispatch(t), onscrollend: t => this.dispatch(t), onscrollstart: t => this.dispatch(t), onwheel: t => this.dispatch(t), onwheelend: t => this.dispatch(t), onwheelstart: t => this.dispatch(t), onwheelend: t => this.dispatch(t) }), this.colorpicker = n("div", { textContent: "666" })), "autofocus,form,spellcheck,dirname,title,tabindex,accesskey".split(",").forEach(t => e.defineProperty(this, t, { get: () => this.textarea[t], set: e => this.textarea[t] = e })) } get value() { return this.textarea.value } set value(t) { "string" != typeof t && (t = t.join("\n")), r(` ${this.nodeName}:${this.id} set value ${t.split("\n").length} lines `); let e = t.split("\n").map(t => t.match(/^\s*/)[0].length).filter(Boolean); this.textarea.value = this.indent(" ".repeat(e.length ? Math.min(...e) : 0) + t) } get minrows() { return this.getAttribute("minrows") || 2 } set minrows(t) { this.setAttribute("minrows", t) } get maxrows() { return this.getAttribute("maxrows") || 10 } set maxrows(t) { this.setAttribute("maxrows", t) } get lines() { return this.textarea.value.split("\n").filter(Boolean) } get linecount() { return this.lines.length } connectedCallback() { this.setcolors(), this.appendfont(), setTimeout(() => { this.rows = this.getAttribute("rows") || 5, this.maxLines = this.getAttribute("maxrows") || 10, this.gettemplate(), this.update(), this.adjustHeight(), this.spellcheck = this.hasAttribute("spellcheck"), this.colorpickers() }, 1), t.addEventListener("resize", () => this.resized(evt)) } adjustHeight(t) { console.warn("adjustHeight", this.linecount, this.maxlines), this.linecount > this.maxLines || (this.textarea.style.height = "auto", this.textarea.style.height = this.textarea.scrollHeight + "px", console.log("adjustHeight", this.textarea.scrollHeight)) } colorpickers() { this.colorpicker.replaceWith(n("div", { append: [...this.colors.override.split(",").map(t => t.split(" ")).map(([t, e]) => n("label", { append: [t, n("input", { type: "color", value: e, oninput: e => console.log(`Color ${t}:`, e.target.value) })] }))] })) } update() { "DEMO" == this.id && this.addline("// new line inserted here by function", 2, !0), this.textarea.setAttribute("rows", 10), this.updatelinenumbers() } updatelinenumbers(t = this.hasAttribute("nolinenumbers")) { this.stylelinenumbers.textContent = `textarea{padding-inline:${t ? 1 : 4}ch;background-image:url("data:image/svg+xml,${this.linenumbers(t)}");background-size:cover;background-attachment:local;background-position:0 0;background-repeat:no-repeat}` } getline(t, e = t) { return this.lines.splice(--t, e - t).join("\n") } getindent(t) { return "number" == typeof t && (t = this.getline(t)), t.length - t.trimStart().length } deleteline(t, e = t) { let i = this.lines; i.splice(--t, e - t); this.value = i } addline(t = "newline", e, i = !1) { let s = this.lines; i && ("number" != typeof i && (i = this.getindent(e), r(e, i, this.getline(e))), t = " ".repeat(i) + t), s.splice(e, 0, t), this.value = s } slice(t = 0, e = t) { } typewriter(t, e = 10, i = (() => console.warn("End typing"))) { let s = t, a = 0, n = setInterval(() => { a++; let t = s.slice(0, a); this.value = t, t.length == s.length && (clearInterval(n), i()) }, e) } gettemplate() { let t = this.querySelector("template"); t ? this.value = " ".repeat(t.innerHTML.split("\n").slice(-1)[0].match(/^\s*/)[0].length) + t.innerHTML : (this.linecount && r(` ${this.nodeName} %s lines already set `, this.linecount), console.warn("No <template> inside", this.linecount)) } async appendfont(e = t.getElementById(o)) { if (!e) { t.head.append(e = n("style", { id: o })), r(" load font once ", o); let i = await (await fetch("./font/base64.txt")).text(); e.textContent = `@font-face{font-family:${o};` + `src:url(data:font/woff2;base64,${i})}` } this.palette() } setcolors() { let t = { mark: "darkslateblue", marktext: "beige", background: "#666", color: "gold", override: l[0] }; this.colors = { light: { mark: "lightgreen", marktext: "#555", background: "#eee", color: "#282", override: l[1] }, dark: t }[this.getAttribute("palette") || "dark"] || t } palette() { if (this.colors) { let e = o + "_palette_" + (this.getAttribute("palette") || "dark"), i = t.getElementById(e); i || t.head.append(i = n("style", { id: e })), i.textContent = `@font-palette-values --${e}{font-family:${o};override-colors:${this.colors.override}}`, this.palettestyle.textContent = `textarea{font-family:${o};font-palette: --${e};background-color:${this.colors.background};color:${this.colors.color}}`, r(` palette ${this.getAttribute("palette")} `, this.colors) } else console.error("incorrect palette") } dispatch(t, e = "") { "mousemove".includes(t.type) || r(t.type, this.localName), this.dispatchEvent(new CustomEvent(this.localName, { detail: { type: t.type, evt: t, value: e }, bubbles: !0, composed: !0 })) } attributeChangedCallback(t, e, i) { "maxrows" === t && (this.maxLines = i, this.adjustHeight()) } indent(t, e = 2) { t = n("textarea", { textContent: t }).value; let i = t.split("\n"), s = i.map(t => t.slice(Math.min(...i.filter(t => t.trim()).map(t => t.match(/^[ \t]*/)[0].length)))).join("\n").replace(/^\s*\n/, ""); return s = s.replaceAll(/\t/g, " ".repeat(e)), s = s.replaceAll("    ", " ".repeat(e)), s } setCaretPositionByString(t) { const e = this.value, i = e.indexOf(t); if (-1 !== i) { const e = i + t.length; this.setSelectionRange(e, e), this.focus() } else r("Substring not found") } get marklines() { return (this.getAttribute("marklines") || "").split(",").flatMap(t => { if (t.includes("-")) { const [e, i] = t.split("-").map(Number); return isNaN(e) || isNaN(i) || e > i ? [] : Array.from({ length: i - e + 1 }, (t, i) => e + i) } const e = Number(t); return isNaN(e) ? [] : [e] }) } set marklines(t = [2, 4]) { "string" == typeof t && (t = t.split("-")), this.setAttribute("marklines", t.join("-")) } get markcolor() { return s(this.textarea).getPropertyValue("--styled-textarea-markcolor") || this.getAttribute("markcolor") || this.colors.mark } set markcolor(t = "mediumblue") { this.setAttribute("markcolor", t) } linenumbers(t = !1) { let e = this.textarea.value, a = this.getAttribute("watermark") || /<\/?(?!script\b)[a-z][\s\S]*?>/i.test(e) ? "HTML" : /\.[a-z0-9-_]+\s*\{|[a-z-]+\s*:/i.test(e) ? "CSS" : /\b(function|let|define|const|map|if|for|=>)\b/i.test(e) ? "JavaScript" : "", { borderColor: n, fontSize: r, lineHeight: o, paddingTop: l, width: h, height: c } = s(this.textarea); r = i(r), o = i(o) / r, l = i(l) / 2; let d = 4; this.linecount > 9 && d++, this.linecount > 99 && d++, this.linecount > 999 && d++; let p = ((r * o).toFixed(2) - l / 10).toFixed(2), u = this.marklines, m = "<svg xmlns='http://www.w3.org/2000/svg'><style>" + `.linenr{font:${r}px Arial;opacity:.6;` + `line-height:${o};text-anchor:end;` + `translate:0 calc((var(--n) * ${p}px) + ${l - 5}px)}` + "</style>" + (t ? "" : `<rect x='0' y='0' width='${d}ch' height='100%' fill='${n}'/>`) + Array.from({ length: this.linecount }, (e, i) => { let s = i * p, a = u.includes(i + 1), n = `<text class='linenr' x='3.5ch' style='--n:${++i}' fill='${a ? this.colors.marktext : "grey"}'>${i}</text>`, l = `<rect stroke='#888' stroke-width='.6' x='${t ? 0 : 1}ch' y='${s}' width='100%' height='${o * r + 1}' fill='${this.markcolor}' rx='6' ry='6'  />`; return (a ? l : "") + (t ? "" : n) }).join("") + `<text x='${h}' dx='-2ch' y='1.7ch' font-size='${2 * r}' font-family='arial' opacity='.2' fill='black' text-anchor='end'>${a}</text>` + "</svg>"; return m.replaceAll("#", "%23") } }) }(document, Object, parseFloat, getComputedStyle);    </script>
+    <style>
+        body {
+            font: 21px Arial;
+        }
+
+        @font-face {
+            /* loading regular woff2 file to compare with Base64 version inside element.js source  */
+            /* font-family: "FontWithASyntaxHighlighter-Regular"; */
+            font-family: "styled-font-family";
+        }
+
+        @font-palette-values --CustomPalette1 {
+            /* font-family: 'FontWithASyntaxHighlighter-Regular'; */
+            font-family: 'styled-font-family';
+            override-colors:
+                0 darkgreen,
+                1 lightblue,
+                2 darkgoldenrod,
+                3 purple,
+                4 green,
+                5 orange,
+                7 magenta,
+                8 darkgrey;
+        }
+
+        @font-palette-values --static-code {
+            font-family: 'styled-font-family';
+            override-colors:
+                0 darkgreen,
+                1 lightblue,
+                2 darkblue,
+                3 purple,
+                4 green,
+                5 orange,
+                7 black,
+                8 black;
+        }
+
+
+        h1 {
+            /* font-family: "FontWithASyntaxHighlighter-Regular"; */
+            font-family: "styled-font-family";
+            background: #333;
+            color: goldenrod;
+        }
+
+        styled-textarea::part(textarea) {
+            font-family: "styled-font-family";
+            xfont-size: 18px;
+            xline-height: 1.0;
+            /* font-palette: --CustomPalette1; */
+        }
+
+        #T1::part(textarea) {
+            background-color: paleturquoise;
+            color: darkmagenta;
+            --styled-textarea-markcolor: skyblue;
+        }
+    </style>
+    <script>
+        let previousEvent = "";
+        document.addEventListener("styled-textarea", (evt) => {
+            if (evt.type === previousEvent) return;
+            console.log(evt.type, evt.detail);
+            previousEvent = evt.type;
+        });
+    </script>
+</head>
+
+<body>
+    <styled-textarea id="T0" marklines="2-4,9,8" language="html" hidde showlines="11-16">
+        <template>
+            <div class="container">
+                <p>tiny HTML &amp; CSS sandbox =)</p>
+                <my-component>FOO</my-component>
+            </div>
+            <script>
+                if (foo) bar = 42;
+                let bar = x => baz;
+                function foo() { bar() }
+                let aap;
+                const author = {
+                    name: `foo${this.value}value baz`,
+                    name: "name class let const url url() (class) class[]",
+                    website: new URL("https://www.google.com"),
+                    color: #123abc
+                };
+                console.log(author.website?.host ?? 'No website');
+            </script>
+            <div>Hello</div>
+        </template>
+        <img src="" onerror="console.error('END LightDOM', document.T0=true)">
+    </styled-textarea>
+</body>
+
+</html>
